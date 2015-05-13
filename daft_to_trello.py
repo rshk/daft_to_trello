@@ -322,7 +322,7 @@ def scrape_daft_page(url):
     title_tag = content_tag.cssselect('.smi-info h1')[0]
     info['title'] = title_tag.text
 
-    image_tag = html.cssselect('#content img')[0]
+    image_tag = html.cssselect('#smi-gallery-img-main img')[0]
     image_src = image_tag.attrib['src']
     if image_src.startswith('//'):
         image_src = 'https:' + image_src
@@ -337,7 +337,9 @@ def scrape_daft_page(url):
     info['beds'] = hdrtext[1]
     info['baths'] = hdrtext[2]
 
-    info['description'] = ''
+    info['description'] = '\n\n'.join(
+        elem.text_content()
+        for elem in html.cssselect('#smi-tab-overview .description_block'))
     # info['description'] = content_tag.cssselect('.overview')[0].text
 
     return info
