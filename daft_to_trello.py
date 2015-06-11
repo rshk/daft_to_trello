@@ -3,18 +3,15 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import contextlib
-import json
-import logging
 import os
 import shelve
 import urlparse
 from collections import defaultdict
 from ConfigParser import NoOptionError, NoSectionError, RawConfigParser
 
+import click
 import lxml.html
 import requests
-
-import click
 
 
 DEFAULT_CONFIG_FILE = os.path.expanduser('~/.config/daft2trello.ini')
@@ -154,6 +151,9 @@ class TrelloClient(object):
 
 
 class CachedHttpClient(object):
+    """
+    Mostly for convenience during development of the scraper :)
+    """
 
     @contextlib.contextmanager
     def _shelf(self, *a, **kw):
@@ -303,7 +303,7 @@ def import_ad(url):
 
     card = trello_client.create_card(
         target_list_id, name=card_title,
-        desc='TODO: Fill this description')
+        desc=data['description'])
 
     img_att = trello_client.attach_to_card(card['id'], url=data['image'])
     trello_client.update_card(card['id'], cover_attachment_id=img_att['id'])
